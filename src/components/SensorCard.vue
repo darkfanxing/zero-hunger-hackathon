@@ -1,7 +1,7 @@
 <template>
   <v-card class="pa-5">
     <v-card-text class="text-center">
-      <img :src="sensor.path" style="width: 50px; height: 50px;">
+      <img :src="sensor.path" style="width: 50px; height: 50px;" />
       <h1 class="text-center my-5">{{ sensor.name }}</h1>
       <div class="pb-0 title">{{ getSensorsData }} {{ sensor.unit }}</div>
     </v-card-text>
@@ -9,39 +9,30 @@
 </template>
 
 <script>
-import { db } from "@/plugins/db.js"
-
+import { db } from "@/plugins/db.js";
 export default {
-	data() {
-		return {
-			dbData: []
-		};
-	},
-
+  data() {
+    return {
+      sensorData: []
+    };
+  },
   props: {
     sensor: {
       required: true,
       type: Object
     }
   },
-
   computed: {
     getSensorsData() {
-      console.log(this.sensorData)
-      return this.sensorData.length == 0 ? "" : this.sensorData[0].data.toFixed(3)
+      return this.sensorData.length == 0
+        ? ""
+        : this.sensorData[0][this.sensor.queryName].toFixed(3);
     }
   },
-
   firebase() {
     return {
-      sensorData: db.ref(`/sensor/${this.sensor.queryName}`).limitToLast(1)
+      sensorData: db.ref(`/${this.sensor.queryName}`).limitToLast(1)
     };
-  },
-  
-	// firebase() {
-	// 	return {
-	// 		dbData: db.ref("/dht")
-	// 	};
-	// }
+  }
 };
 </script>
